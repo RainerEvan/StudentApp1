@@ -28,12 +28,17 @@ public class StudentController {
         return studentService.getStudents();
     }
 
+    @GetMapping(path = "/api/student/{studentId}")
+    public Student getStudentById(@PathVariable("studentId") Long studentId){
+        return studentService.findStudentById(studentId);
+    }
+
     @PostMapping(path = "/api/new")
     public void registerNewStudent(@RequestBody Student student){
         studentService.addNewStudent(student);
     }
 
-    @PutMapping(value="/api/update/{studentId}")
+    @PutMapping(path ="/api/update/{studentId}")
     public void updateStudent(@PathVariable("studentId") Long studentId, @RequestParam(required = false) String name, @RequestParam(required = false) String email){
         studentService.updateStudent(studentId, name, email);
     }
