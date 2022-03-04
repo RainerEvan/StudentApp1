@@ -2,9 +2,6 @@ package com.example.demo.student;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,21 +33,22 @@ public class StudentService {
         studentRepository.save(student);
     }
 
-    @Transactional
-    public void updateStudent(Long studentId, String name, String email) {
-        Student student = studentRepository.findById(studentId).orElseThrow(()->new IllegalStateException("student with id "+ studentId +" does not exist"));
+    public Student updateStudent(Student student) {
+        Student currStudent = studentRepository.findById(student.getId()).orElseThrow(()->new IllegalStateException("student with id "+ student.getId() +" does not exist"));
 
-        if(name != null && name.length()>0 && !Objects.equals(student.getName(), name)){
-            student.setName(name);
+        if(student.getName() != null && student.getName().length()>0 && !Objects.equals(currStudent.getName(), student.getName())){
+            currStudent.setName(student.getName());
         }
         
-        if(email != null && email.length() > 0 && !Objects.equals(student.getEmail(), email)){
-            Optional<Student> studentOptional = studentRepository.findStudentByEmail(email);
+        if(student.getEmail()!= null && student.getEmail().length() > 0 && !Objects.equals(currStudent.getEmail(), student.getEmail())){
+            Optional<Student> studentOptional = studentRepository.findStudentByEmail(student.getEmail());
             if(studentOptional.isPresent()){
                 throw new IllegalStateException("email taken");
             }
-            student.setEmail(email);
+            currStudent.setEmail(student.getEmail());
         }
+        
+        return studentRepository.save(currStudent);
     }
     
     public void deleteStudent(Long studentId) {

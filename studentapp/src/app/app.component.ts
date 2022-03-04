@@ -33,7 +33,7 @@ export class AppComponent implements OnInit{
   }
 
   public onAddStudent(addForm: NgForm): void{
-    document.getElementById('add-student-form').click();
+    document.getElementById('add-student-form')!.click();
     this.studentService.addStudents(addForm.value).subscribe(
       (response: Student) => {
         console.log(response);
@@ -107,7 +107,7 @@ export class AppComponent implements OnInit{
       button.setAttribute('data-target','#deleteStudentModal');
     }
 
-    container.appendChild(button);
+    container!.appendChild(button);
     button.click();
   }
 }
